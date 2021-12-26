@@ -1,0 +1,135 @@
+swagger: "2.0"
+info:
+  version: 1.0.0
+  title: Reto Desarrollo
+  description: Reto Desarrollo
+  termsOfService: http://swagger.io/terms/
+  contact:
+    name: Alvaro Chavez
+    email: alvaro1221x@gmail.com
+    url: http://swagger.io
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+schemes:
+  - http
+consumes:
+  - application/json
+host:  localhost:3000
+
+produces:
+  - application/json
+paths:
+  /movies/all:
+    get:
+      description: 
+        Devuelve todas las peliculas en paginas de 5.
+      operationId: all
+      parameters:
+        - name: page
+          in: header
+          description: Número de página
+          required: false
+          type: integer
+          format: int
+      responses:
+        "200":
+          description: Peliculas paginadas en grupos de 5
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/MovieAll'
+  /movies/replace:
+    post:
+      description: Reemplaza campo Plot de una película
+      operationId: replace
+      parameters:
+        - name: movieReplaceDTO
+          in: body
+          description: JSON utilizado para remplazar campo PLOT
+          required: true
+          schema:
+            $ref: '#/definitions/MovieReplace'
+      responses:
+        "200":
+          schema:
+            $ref: '#/definitions/Plot'
+          
+  /movies/find/{pelicula}:
+    get:
+      description: Retorna una película segun nombre y año
+      operationId: moviesFind
+      parameters:
+        - name: pelicula
+          in: path
+          description: Nombre de la pelicula
+          required: true
+          type: string
+        - name: year
+          in: header
+          description: Año de la pelicula
+          required: false
+          type: string  
+      responses:
+        "200":
+          description: Respuesta exitosa
+          schema:
+            $ref: '#/definitions/Movie'
+  
+definitions:
+  MovieAll:
+      type: "object"
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/definitions/Movie'
+        page:
+          type: integer
+        totalPages:
+          type: integer
+        total: 
+          type: integer    
+
+  Plot :
+    type: "object" 
+    properties:
+      Plot:
+        type: string
+
+  Movie:
+    type: "object" 
+    properties:
+      Title:
+        type: string
+      Year:
+        type: string    
+      Relased:
+        type: string
+      Genre:
+        type: string    
+      Director:
+        type: string
+      Actors:
+        type: string
+      Plot:
+        type: string
+      Ratings:
+        type: array
+        items: 
+           type: object    
+           properties:
+            Source:
+              type: string
+            Value: 
+              type: string
+  MovieReplace:
+    type: "object" 
+    properties:
+      movie:
+        type: string
+      find:
+        type: string    
+      replace: 
+        type: string
+        
